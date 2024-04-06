@@ -40,12 +40,11 @@ function register {
     done
 
 
-    new_password=$(echo $new_password | sha1sum | awk '{print $1}')
+    new_password=$(echo $new_password | sha256sum | awk '{print $1}')
     mkdir ./users/$name
 
         
     echo $name$separator$new_password > ./users/$name/.acc
-    echo $name, $separator, $new_password
     echo $result > ./users/$name/ach.txt
     
     echo "Вы успешно зарегистрировались, ваш результат зафиксирован"
@@ -63,7 +62,7 @@ function log_in {
         read -s -p "Введите пароль:" password
 
 
-        password=$(echo $password | sha1sum | awk '{print $1}')
+        password=$(echo $password | sha256sum | awk '{print $1}')
         check_log=$(check_login $name)
 
 
@@ -114,5 +113,5 @@ function new_result {
 
 }
 
-new_result -2
+
 
