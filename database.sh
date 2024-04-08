@@ -2,15 +2,36 @@
 
 
 function top_plyers() {
+    local count=0
+
     for list in $(ls ./users)
     do
-    
+
+        list_ach[$count]=$(cat ./users/$list/ach.txt)
+        count=$(($count + 1))
+
+
+    done
+    count=$(($count - 1))
+
+    #Ошибка аргумента до этого все правильно 
+    for repeat in 0:$count
+    do
+        for check_max in 0:$(($count - 1))
+        do
+            if [[ ${list_ach[$check_max]} -lt ${list_ach[$(($check_max + 1))]} ]]
+            then 
+                repeter=${list_ach[$check_max]}
+                list_ach[$check_max]=${list_ach[$(($check_max + 1))]}
+                list_ach[$(($check_max + 1))]=$repeter
+            fi
+        done
     done
 }
 
 
 
-
+top_plyers
 
 
 
@@ -72,6 +93,7 @@ function check_login {
 
 
 function register {
+
     local new_password=1
     local check_new_password=0
     echo "Ваш аккаунт не найдет"
@@ -175,4 +197,8 @@ function new_result {
 
 
 
-
+#избавиться от сепаратора 
+#Вынести фотки в отдельную папку photos
+#Избавиться от read в которые можно ничего не вводить 
+#Сделать так чтобы программу во время выполнения некоторых функций нельзя было прервать 
+#Доделать сортировку 
