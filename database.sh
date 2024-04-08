@@ -1,8 +1,58 @@
 #!/bin/bash
 
+
+function top_plyers() {
+    for list in $(ls ./users)
+    do
+    
+    done
+}
+
+
+
+
+
+
+
+
+function photo {
+    local name=$1
+    local approval=0
+    local today=$(date)
+
+    while [[ $approval != "n" && $approval != "y" && $approval != "Y" && $approval != "N" ]]
+    do
+    read -p "Хотите сделать фото в свой альбом?[y/n]: " approval
+    done
+
+
+    if [[ $approval = "y" || $approval = "Y" ]]
+    then
+
+    for i in 1 2 3
+    do
+        echo $i
+        sleep 1
+    done
+
+
+    ffmpeg -i /dev/video0 -t 1 "./users/$name/intruder_$today.png" 1> /dev/null 2> /dev/null
+    echo " "
+    echo "Фото сделанно"
+
+    else
+        return 0
+    fi
+}
+
+
+
+
+
+
 function check_login {
 
-    login=$1
+    local login=$1
     db_name=./users/$login/.acc
     separator="|"
     line=$(cat $db_name)
@@ -17,9 +67,13 @@ function check_login {
 }
 
 
+
+
+
+
 function register {
-    new_password=1
-    check_new_password=0
+    local new_password=1
+    local check_new_password=0
     echo "Ваш аккаунт не найдет"
     echo "Зарегистрируйтесь"
 
@@ -48,7 +102,12 @@ function register {
     echo $result > ./users/$name/ach.txt
     
     echo "Вы успешно зарегистрировались, ваш результат зафиксирован"
+    photo $name
+    
 }
+
+
+
 
 
 
@@ -62,8 +121,8 @@ function log_in {
         read -s -p "Введите пароль:" password
 
 
-        password=$(echo $password | sha256sum | awk '{print $1}')
-        check_log=$(check_login $name)
+        local password=$(echo $password | sha256sum | awk '{print $1}')
+        local check_log=$(check_login $name)
 
 
         if [[ $name$separator$password == $check_log ]]
@@ -95,10 +154,10 @@ function log_in {
 
 
 
+
 function new_result {
-    separator="|"
     read -p "Введите ваше имя: " name
-    result=$1
+    local result=$1
 
     for line in $(ls users)
     do
@@ -112,6 +171,8 @@ function new_result {
     return 0
 
 }
+
+
 
 
 
