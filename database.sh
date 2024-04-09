@@ -6,7 +6,8 @@ function top_plyers() {
 
     for list in $(ls ./users)
     do
-
+        
+        list_users[$count]=$list
         list_ach[$count]=$(cat ./users/$list/ach.txt)
         count=$(($count + 1))
 
@@ -14,19 +15,34 @@ function top_plyers() {
     done
     count=$(($count - 1))
 
-    #Ошибка аргумента до этого все правильно 
-    for repeat in 0:$count
+    
+    for ((repeat=0; $repeat<$(($count)); repeat++))
     do
-        for check_max in 0:$(($count - 1))
+        for ((check_max=0; $check_max<$(($count - $repeat)); check_max++))
         do
+
             if [[ ${list_ach[$check_max]} -lt ${list_ach[$(($check_max + 1))]} ]]
             then 
+
                 repeter=${list_ach[$check_max]}
                 list_ach[$check_max]=${list_ach[$(($check_max + 1))]}
                 list_ach[$(($check_max + 1))]=$repeter
+
+                repeter=${list_users[$check_max]}
+                list_users[$check_max]=${list_users[$(($check_max + 1))]}
+                list_users[$(($check_max + 1))]=$repeter
+
+
             fi
         done
     done
+    
+    for ((permutation=0; permutation<=$count; permutation++))
+    do
+        echo "${list_users[$permutation]}: ${list_ach[$permutation]}"
+
+    done
+    return 0
 }
 
 
@@ -43,7 +59,7 @@ function photo {
 
     while [[ $approval != "n" && $approval != "y" && $approval != "Y" && $approval != "N" ]]
     do
-    read -p "Хотите сделать фото в свой альбом?[y/n]: " approval
+    read -p "Хотите сделать фото в альбом?[y/n]: " approval
     done
 
 
@@ -57,7 +73,7 @@ function photo {
     done
 
 
-    ffmpeg -i /dev/video0 -t 1 "./users/$name/intruder_$today.png" 1> /dev/null 2> /dev/null
+    ffmpeg -i /dev/video0 -t 1 "./Binariki_users_photo/$name.png" 1> /dev/null 2> /dev/null
     echo " "
     echo "Фото сделанно"
 
@@ -96,6 +112,7 @@ function register {
 
     local new_password=1
     local check_new_password=0
+    separator="|"
     echo "Ваш аккаунт не найдет"
     echo "Зарегистрируйтесь"
 
@@ -136,6 +153,8 @@ function register {
 
 function log_in {
     attempts=3
+    separator="|"
+
 
     while [[ $attempts -ne 0 ]]
     do  
@@ -197,8 +216,6 @@ function new_result {
 
 
 
-#избавиться от сепаратора 
-#Вынести фотки в отдельную папку photos
 #Избавиться от read в которые можно ничего не вводить 
 #Сделать так чтобы программу во время выполнения некоторых функций нельзя было прервать 
 #Доделать сортировку 
