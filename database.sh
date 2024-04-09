@@ -47,8 +47,6 @@ function top_plyers() {
 
 
 
-top_plyers
-
 
 
 
@@ -197,7 +195,10 @@ function log_in {
 
 
 function new_result {
+
     read -p "Введите ваше имя: " name
+
+
     local result=$1
 
     for line in $(ls users)
@@ -213,9 +214,7 @@ function new_result {
 
 }
 
+new_result 9
 
 
-
-#Избавиться от read в которые можно ничего не вводить 
 #Сделать так чтобы программу во время выполнения некоторых функций нельзя было прервать 
-#Доделать сортировку 
