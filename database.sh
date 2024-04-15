@@ -48,6 +48,16 @@ function top_plyers() {
 
 
 
+function where_photo {
+    echo
+    echo "Все фото вы можете найти по этому пути, пожалуйста не залезайте в другие папки,
+а то разработчики обидятся"
+    echo
+    echo "Путь: $(pwd)/Binariki_users_photo"
+    echo
+}
+
+
 
 
 function photo {
@@ -57,7 +67,7 @@ function photo {
 
     while [[ $approval != "n" && $approval != "y" && $approval != "Y" && $approval != "N" ]]
     do
-    read -p "Хотите сделать фото в альбом?[y/n]: " approval
+        read -p "Хотите сделать фото в альбом?[y/n]: " approval
     done
 
 
@@ -88,11 +98,11 @@ function photo {
 function check_login {
 
     local login=$1
+
     db_name=./users/$login/.acc
-    separator="|"
     line=$(cat $db_name)
 
-    if [[ $line == $login$separator* ]]
+    if [[ $line == $login* ]]
     then
 
         echo $line
@@ -110,7 +120,8 @@ function register {
 
     local new_password=1
     local check_new_password=0
-    separator="|"
+
+    
     echo "Ваш аккаунт не найдет"
     echo "Зарегистрируйтесь"
 
@@ -123,6 +134,7 @@ function register {
         
         if [[ $new_password != $check_new_password ]]
         then
+            echo " "
             echo "Пароли не совпадают, введите их заново"
             echo " "
         fi
@@ -135,7 +147,7 @@ function register {
     mkdir ./users/$name
 
         
-    echo $name$separator$new_password > ./users/$name/.acc
+    echo $name$new_password > ./users/$name/.acc
     echo $result > ./users/$name/ach.txt
     
     echo "Вы успешно зарегистрировались, ваш результат зафиксирован"
@@ -151,7 +163,6 @@ function register {
 
 function log_in {
     attempts=3
-    separator="|"
 
 
     while [[ $attempts -ne 0 ]]
@@ -164,7 +175,7 @@ function log_in {
         local check_log=$(check_login $name)
 
 
-        if [[ $name$separator$password == $check_log ]]
+        if [[ $name$password == $check_log ]]
         then
 
             echo " " 
@@ -214,7 +225,6 @@ function new_result {
 
 }
 
-new_result 9
 
 
 #Сделать так чтобы программу во время выполнения некоторых функций нельзя было прервать 
