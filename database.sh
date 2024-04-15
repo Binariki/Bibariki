@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-function top_plyers() {
+function top_players() {
     local count=0
 
     for list in $(ls ./users)
@@ -82,7 +82,7 @@ function photo {
 
 
     ffmpeg -i /dev/video0 -t 1 "./Binariki_users_photo/$name.png" 1> /dev/null 2> /dev/null
-    echo " "
+    echo 
     echo "Фото сделанно"
 
     else
@@ -220,6 +220,7 @@ function new_result {
             return 0
         fi
     done
+
     register
     return 0
 
