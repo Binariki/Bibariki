@@ -1,52 +1,54 @@
 function turn_go {
-    play=$2
-    case $1 in
-        0)
-            if [[ $play == "X" ]]
-            then
-                player="O"
-            else
-                player="X"
-            fi
-            turn=$(($turn+1))
-            ;;
-        1)
-            echo "Ячейка уже использована, выберите другую"
-            ;;
-        2)
-            echo "Номер ячейки не должен быть пуст"
-            ;;
-        3)
-            echo "Номер ячейки должен являться цифрой от 1 до 9"
+    local square=$1
+    shift
+    local field=($1 $2 $3 $4 $5 $6 $7 $8 $9)
 
-    esac
+    if [[ ! -n "$square" ]]
+    then
+        echo "Номер ячейки не должен быть пуст"
+        return 2
+    elif [[ "$square" -gt 9 || "$square" -lt 1 ]]
+    then
+        echo "Номер ячейки должен являться цифрой от 1 до 9"
+        return 3
+    fi
+
+    if [[ ${field[$(($square-1))]} == "X" || ${field[$(($square-1))]} == "O" ]]
+    then
+        echo "Ячейка уже использована, выберите другую"
+        return 1
+    fi
+
+    return 0
 }
 
 function check_win {
-    field=$1
+    local field=($1 $2 $3 $4 $5 $6 $7 $8 $9)
     if [[ ${field[0]} == ${field[1]} && ${field[0]} == ${field[2]} ]]
     then
-        win=1
+        return 1
     elif [[ ${field[3]} == ${field[4]} && ${field[3]} == ${field[5]} ]]
     then
-        win=1
+        return 1
     elif [[ ${field[6]} == ${field[7]} && ${field[6]} == ${field[8]} ]]
     then
-        win=1
+        return 1
     elif [[ ${field[0]} == ${field[3]} && ${field[0]} == ${field[6]} ]]
     then
-        win=1
+        return 1
     elif [[ ${field[1]} == ${field[4]} && ${field[1]} == ${field[7]} ]]
     then
-        win=1
+        return 1
     elif [[ ${field[2]} == ${field[5]} && ${field[2]} == ${field[8]} ]]
     then
-        win=1
+        return 1
     elif [[ ${field[0]} == ${field[4]} && ${field[0]} == ${field[8]} ]]
     then
-        win=1
+        return 1
     elif [[ ${field[2]} == ${field[4]} && ${field[2]} == ${field[6]} ]]
     then
-        win=1
+        return 1
     fi
+
+    return 0
 }
