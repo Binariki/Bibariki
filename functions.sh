@@ -7,7 +7,7 @@ function turn_go {
     then
         echo "Номер ячейки не должен быть пуст"
         return 2
-    elif [[ "$square" -gt 9 || "$square" -lt 1 ]]
+    elif [[ ! -n $(echo $square | grep "^[0-9]$") ]]
     then
         echo "Номер ячейки должен являться цифрой от 1 до 9"
         return 3

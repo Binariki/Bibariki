@@ -12,7 +12,7 @@ function bot_play {
 
     draw ${field[@]}
 
-    while [[ $turn -lt 9 ]]
+    while [[ $turns -lt 9 ]]
     do
 
         if [[ $player == "X" ]]
@@ -35,14 +35,19 @@ function bot_play {
             field[$((square-1))]=$player
 
             draw ${field[@]}
-            turn=$(($turn+1))
+            turns=$(($turns+1))
 
             check_win ${field[@]}
 
             if [[ $? -eq 1 ]]
             then
                 echo "Победил игрок $player"
-                return 0
+                if [[ $player -eq "X" ]]
+                then
+                    return 2
+                else
+                    return 0
+                fi
             fi
 
             if [[ $player == "X" ]]
@@ -55,6 +60,7 @@ function bot_play {
 
     done
     echo "Ничья!"
-    exit
+    return 1
+
 
 }
