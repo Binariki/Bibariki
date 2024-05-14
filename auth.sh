@@ -24,6 +24,7 @@ function check_login {
 
 function log_in {
     local attempts=3
+    local result=$1
 
 
     while [[ $attempts -ne 0 ]]
@@ -70,6 +71,7 @@ function register {
 
     local new_password=1
     local check_new_password=0
+    local result=$1
 
     
     echo "Ваш аккаунт не найдет"
