@@ -1,70 +1,60 @@
 #!/bin/bash
 
-won=0
-player="X"
-turns=1
-field=(1 2 3 4 5 6 7 8 9)
-
 . ./graph.sh
 . ./functions.sh
 
 function bot_play {
+    local player="X"
+    local turns=1
+    local field=(1 2 3 4 5 6 7 8 9)
+
+    local square=""
+
     draw ${field[@]}
+
     while [[ $turn -lt 9 ]]
     do
+
         if [[ $player == "X" ]]
         then
-            read -p "Введите номер ячейки: " number
-            player_turn $number
+            read -p "Введите номер ячейки: " square
         else
-            bot_turn
+            square=$(($RANDOM%9+1))
+    
+            #здесь бы по-хорошему do while
+            while [[ $square != ${field[$(($square-1))]} ]]
+            do
+                square=$(($RANDOM % 9))
+            done
         fi
-        isok=$?
-        draw ${field[@]}
-        check_win
-        if [[ $win == 1 ]]
+
+        turn_go $square ${field[@]}
+
+        if [[ $? -eq 0 ]]
         then
-            echo "Выиграл игрок $player"
-            exit
+            field[$((square-1))]=$player
+
+            draw ${field[@]}
+            turn=$(($turn+1))
+
+            check_win ${field[@]}
+
+            if [[ $? -eq 1 ]]
+            then
+                echo "Победил игрок $player"
+                return 0
+            fi
+
+            if [[ $player == "X" ]]
+            then
+                player="O"
+            else
+                player="X"
+            fi
         fi
-        turn_go $isok
-        echo $player
+
     done
     echo "Ничья!"
     exit
 
-}
-
-function player_turn {
-    square=$1
-
-
-    if [[ ! -n "$square" ]]
-    then
-        return 2
-    elif [[ "$square" -gt "9" || "$square" -lt "1" ]]
-    then
-        return 3
-    fi
-
-    if [[ ${field[square-1]} != "X" && ${field[square-1]} != "O" ]]
-    then
-        field[$((square-1))]=$player
-        return 0
-    else
-        return 1
-    fi
-}
-
-function bot_turn {
-    echo "ok"
-    number=$(($RANDOM % 9))
-
-    while [[ $(($number+1)) != ${field[$number]} ]]
-    do
-        number=$(($RANDOM % 9))
-    done
-
-    field[$number]=$player
-    return 0
 }
