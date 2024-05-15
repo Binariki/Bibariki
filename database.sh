@@ -107,17 +107,16 @@ function new_result {
     do
         if [[ $name == $line ]]
         then
-            log_in
+            log_in $result
             return 0
         fi
     done
 
-    register
+    register $result
     return 0
 
 }
 
-new_result 2
 
 
 
