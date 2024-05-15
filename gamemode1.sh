@@ -12,11 +12,7 @@ function bot_play {
 
     draw ${field[@]}
 
-<<<<<<< HEAD
-    while [[ $turn -lt 9 ]]
-=======
     while [[ $turns -lt 9 ]]
->>>>>>> v1
     do
 
         if [[ $player == "X" ]]
